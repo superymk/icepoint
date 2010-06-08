@@ -100,6 +100,7 @@ BOOL CIcepointDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	plist.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);  //设置processlist风格
 	plist.PListRefresh();
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
@@ -172,7 +173,7 @@ int ProcessListCtrl::PListRefresh()
 	while(DeleteColumn(0));//删除列标
 
 	InsertColumn(0,(LPCTSTR)"进程ID",LVCFMT_LEFT,80);//插入0列
-    InsertColumn(1,(LPCTSTR)"进程名称",LVCFMT_LEFT,150);//插入1列
+    InsertColumn(1,(LPCTSTR)"进程名称",LVCFMT_LEFT,300);//插入1列
 
 	HANDLE handle=CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0);//创建当前快照列表
 
@@ -191,20 +192,20 @@ int ProcessListCtrl::PListRefresh()
 			CString id;
 			id.Format("%d",info->th32ProcessID);//获取当前进程ID
 
-			InsertItem(i,id);//插入一个项目
+			InsertItem(i,(LPCTSTR)id);//插入一个项目
 			SetItemData(i,info->th32ProcessID);//设置项目值
 			id.Format("%s",info->szExeFile);//获取当前进程名
-			SetItemText(i,1,id);//设置名
+			SetItemText(i,1,(LPCTSTR)id);//设置名
 			i++;
 
 			while(Process32Next(handle,info)!=FALSE)//继承获取进程
 			{
-				id.Format("%5d",info->th32ProcessID);
+				id.Format("%d",info->th32ProcessID);
 
-				InsertItem(i,id);
+				InsertItem(i,(LPCTSTR)id);
 				SetItemData(i,info->th32ProcessID);
 				id.Format("%s",info->szExeFile);
-				SetItemText(i,1,id);
+				SetItemText(i,1,(LPCTSTR)id);
 				i++;
 			}
 		}
@@ -260,6 +261,9 @@ void CIcepointDlg::OnBnClickedButtonFreezing()
 		FreezingControl fc;
 		fc.Freezing(atoi(lvi.pszText),(LPCTSTR)FilePathName);
 	}
+
+	// 刷新进程列表
+	plist.PListRefresh();
 }
 
 void CIcepointDlg::OnTimer(UINT_PTR nIDEvent)
@@ -285,4 +289,7 @@ void CIcepointDlg::OnBnClickedButtonUnfreezing()
 		UnfreezingControl ufc;
 		ufc.Unfreezing((LPCTSTR)FilePathName);
 	}
+
+	// 刷新进程列表
+	plist.PListRefresh();
 }
