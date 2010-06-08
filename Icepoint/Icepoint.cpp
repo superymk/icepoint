@@ -5,6 +5,7 @@
 #include "Icepoint.h"
 #include "IcepointDlg.h"
 
+#include "Chronosphere.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -23,6 +24,7 @@ CIcepointApp::CIcepointApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
+	ChronInit();
 }
 
 
@@ -79,9 +81,11 @@ BOOL CIcepointApp::InitInstance()
 void FreezingControl::Freezing(DWORD pid, const char *file_dir)
 {
 	//干冻实现代码
-	CString msg;
+	/*CString msg;
 	msg.Format("选中进程号: %d\n保存路径: %s", pid, file_dir);
-	AfxMessageBox(msg);
+	AfxMessageBox(msg);*/
+	SaveProcessState(pid, file_dir);
+
 }
 
 //解冻实现接口，返回解冻后进程的pid

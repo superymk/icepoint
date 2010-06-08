@@ -2,10 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Icepoint"
-	ProjectGUID="{C9678F22-069F-4A3A-8581-DF86B98C7988}"
-	RootNamespace="Icepoint"
-	Keyword="MFCProj"
+	Name="Core"
+	ProjectGUID="{E790E63E-5967-45E9-B67E-8B4C48F4DD0A}"
+	RootNamespace="Core"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -20,8 +19,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
-			UseOfMFC="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			>
 			<Tool
@@ -38,19 +36,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="false"
-				ValidateParameters="true"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\inc;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
+				AdditionalIncludeDirectories="..\inc"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -59,27 +52,15 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="Core.lib"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\Debug"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -91,9 +72,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -102,7 +80,6 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			UseOfMFC="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -120,19 +97,13 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="false"
-				ValidateParameters="true"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
-				MinimalRebuild="false"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -141,18 +112,13 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
@@ -184,27 +150,26 @@
 	</References>
 	<Files>
 		<Filter
-			Name="源文件"
+			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Icepoint.cpp"
+				RelativePath=".\Chronosphere.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IcepointDlg.cpp"
+				RelativePath=".\ChronThreadControl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\stdafx.cpp"
+				RelativePath=".\WinFunc.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -212,64 +177,53 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
-			Name="头文件"
+			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Icepoint.h"
+				RelativePath="..\inc\Chronosphere.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IcepointDlg.h"
+				RelativePath=".\ChronThreadControl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Resource.h"
+				RelativePath=".\Windef.h"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\stdafx.h"
-				>
-			</File>
-			<File
-				RelativePath=".\targetver.h"
+				RelativePath=".\WinFunc.h"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="资源文件"
+			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath=".\res\Icepoint.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\Icepoint.rc"
-				>
-			</File>
-			<File
-				RelativePath=".\res\Icepoint.rc2"
-				>
-			</File>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="Icepoint.rc"
-		/>
 	</Globals>
 </VisualStudioProject>
