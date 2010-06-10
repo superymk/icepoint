@@ -37,7 +37,7 @@ BOOL ResumeAllThreads(std::vector<DWORD> threadIDs, DWORD numThreads)
 	return TRUE;
 }
 
-BOOL ListProcessThreads(DWORD dwOwnerPID, DWORD *numThreads, std::vector<DWORD>* threadIDs) 
+BOOL ListProcessThreads(DWORD dwOwnerPID, DWORD *pnumThreads, std::vector<DWORD>* pthreadIDs) 
 { 
   HANDLE hThreadSnap = INVALID_HANDLE_VALUE; 
   THREADENTRY32 te32; 
@@ -68,10 +68,10 @@ BOOL ListProcessThreads(DWORD dwOwnerPID, DWORD *numThreads, std::vector<DWORD>*
   { 
     if( te32.th32OwnerProcessID == dwOwnerPID )
     {
-		if (threadIDs)
-			(*threadIDs).push_back(te32.th32ThreadID);
-		if (numThreads)
-			(*numThreads)++;
+		if (pthreadIDs)
+			(*pthreadIDs).push_back(te32.th32ThreadID);
+		if (pnumThreads)
+			(*pnumThreads)++;
     }
   } while( Thread32Next(hThreadSnap, &te32 ) ); 
 

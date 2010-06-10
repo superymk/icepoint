@@ -37,6 +37,24 @@ typedef struct _PEB
 	UCHAR Reserved2[0x208 + 4 - 0x1f0];
 } PEB, *PPEB;
 
+typedef struct _TEB {
+	_NT_TIB Tib;
+    BYTE Reserved1[1952-0x1c];
+    PVOID Reserved2[412];
+    PVOID TlsSlots[64];
+    BYTE Reserved3[8];
+    PVOID Reserved4[26];
+    PVOID ReservedForOle;  // Windows 2000 only
+    PVOID Reserved5[4];
+    PVOID TlsExpansionSlots;
+} TEB, *PTEB;
+
+typedef struct _CLIENT_ID   {   
+	HANDLE   UniqueProcess;   
+	HANDLE   UniqueThread;   
+  }   CLIENT_ID;   
+typedef   CLIENT_ID   *PCLIENT_ID;   
+
 typedef struct _PROCESS_BASIC_INFORMATION {
     PVOID Reserved1;
     PPEB PebBaseAddress;
@@ -44,5 +62,14 @@ typedef struct _PROCESS_BASIC_INFORMATION {
     ULONG_PTR UniqueProcessId;
     PVOID Reserved3;
 } PROCESS_BASIC_INFORMATION;
+
+typedef struct _THREAD_BASIC_INFORMATION   {   
+	LONG		ExitStatus;   
+	PVOID		TebBaseAddress;   
+	CLIENT_ID   ClientId;   
+	LONG		AffinityMask;   
+	LONG		Priority;   
+	LONG		BasePriority;   
+}   THREAD_BASIC_INFORMATION,   *PTHREAD_BASIC_INFORMATION;   
 
 #endif

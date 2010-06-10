@@ -58,6 +58,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="psapi.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -159,6 +160,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ChronProcInfo.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ChronThreadControl.cpp"
 				>
 			</File>
@@ -188,6 +193,10 @@
 			>
 			<File
 				RelativePath="..\inc\Chronosphere.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ChronProcInfo.h"
 				>
 			</File>
 			<File

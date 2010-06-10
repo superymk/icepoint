@@ -60,6 +60,29 @@ typedef enum _PROCESSINFOCLASS {
   MaxProcessInfoClass
 } PROCESSINFOCLASS;
 
+typedef enum _THREADINFOCLASS {
+	ThreadBasicInformation,   
+	ThreadTimes,
+	ThreadPriority, 
+	ThreadBasePriority, 
+	ThreadAffinityMask,  
+	ThreadImpersonationToken,
+	ThreadDescriptorTableEntry,
+	ThreadEnableAlignmentFaultFixup, 
+	ThreadEventPair_Reusable, 
+	ThreadQuerySetWin32StartAddress,
+	ThreadZeroTlsCell, 
+	ThreadPerformanceCount, 
+	ThreadAmILastThread, 
+	ThreadIdealProcessor, 
+	ThreadPriorityBoost,  
+	ThreadSetTlsArrayAddress, 
+	ThreadIsIoPending, 
+	ThreadHideFromDebugger,
+	ThreadBreakOnTermination, 
+	MaxThreadInfoClass    
+} THREADINFOCLASS;
+
 typedef NTSTATUS (NTAPI *pfnNtQueryInformationProcess)(
     IN  HANDLE ProcessHandle,
     IN  PROCESSINFOCLASS ProcessInformationClass,
@@ -68,7 +91,16 @@ typedef NTSTATUS (NTAPI *pfnNtQueryInformationProcess)(
     OUT PULONG ReturnLength    OPTIONAL
     );
 
+typedef NTSTATUS (WINAPI *pfnNtQueryInformationThread)(
+  IN	HANDLE ThreadHandle,
+  IN    THREADINFOCLASS ThreadInformationClass,
+  OUT   PVOID ThreadInformation,
+  IN    ULONG ThreadInformationLength,
+  OUT   PULONG ReturnLength   OPTIONAL
+);
+
 extern pfnNtQueryInformationProcess gNtQueryInformationProcess;
+extern pfnNtQueryInformationThread gNtQueryInformationThread;
 
 extern BOOL LoadWinFunc(VOID);
-extern BOOL UnloadWinFunc(VOID);
+extern VOID UnloadWinFunc(VOID);

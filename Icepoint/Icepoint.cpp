@@ -92,9 +92,10 @@ void FreezingControl::Freezing(DWORD pid, const char *file_dir)
 DWORD UnfreezingControl::Unfreezing(const char *file_dir)
 {
 	//解冻实现代码
-	CString msg;
+	/*CString msg;
 	msg.Format("打开文件路径: %s", file_dir);
-	AfxMessageBox(msg);
+	AfxMessageBox(msg);*/
+	LoadProcessState(file_dir);
 
 	return NULL;
 }
