@@ -88,6 +88,15 @@ void FreezingControl::Freezing(DWORD pid, const char *file_dir)
 
 }
 
+//隐藏进程实现接口
+void FreezingControl::Hide(DWORD pid)
+{
+	//实现代码
+	CString msg;
+	msg.Format("选中进程号: %d\n", pid);
+	AfxMessageBox(msg);
+}
+
 //解冻实现接口，返回解冻后进程的pid
 DWORD UnfreezingControl::Unfreezing(const char *file_dir)
 {

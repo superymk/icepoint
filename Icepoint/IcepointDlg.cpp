@@ -67,6 +67,8 @@ BEGIN_MESSAGE_MAP(CIcepointDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_FREEZING, &CIcepointDlg::OnBnClickedButtonFreezing)
 	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_BUTTON_UNFREEZING, &CIcepointDlg::OnBnClickedButtonUnfreezing)
+	ON_BN_CLICKED(IDC_BUTTON1, &CIcepointDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON4, &CIcepointDlg::OnBnClickedButton4)
 END_MESSAGE_MAP()
 
 
@@ -172,8 +174,8 @@ int ProcessListCtrl::PListRefresh()
 	DeleteAllItems();//删除列表框所有
 	while(DeleteColumn(0));//删除列标
 
-	InsertColumn(0,(LPCTSTR)"进程ID",LVCFMT_LEFT,80);//插入0列
-    InsertColumn(1,(LPCTSTR)"进程名称",LVCFMT_LEFT,300);//插入1列
+	InsertColumn(0,(LPCTSTR)"Process ID",LVCFMT_LEFT,80);//插入0列
+    InsertColumn(1,(LPCTSTR)"Process Name",LVCFMT_LEFT,300);//插入1列
 
 	HANDLE handle=CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0);//创建当前快照列表
 
@@ -292,4 +294,37 @@ void CIcepointDlg::OnBnClickedButtonUnfreezing()
 
 	// 刷新进程列表
 	plist.PListRefresh();
+}
+
+void CIcepointDlg::OnBnClickedButton1()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	// 刷新进程列表
+	plist.PListRefresh();
+}
+
+void CIcepointDlg::OnBnClickedButton4()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	TCHAR szBuf[1024];
+    LVITEM lvi;
+	// 获取当前选中项的pid
+	POSITION pos = plist.GetFirstSelectedItemPosition();
+	if(pos)
+	{
+		//获得选中行的内容
+		lvi.iItem = plist.GetNextSelectedItem(pos);
+		lvi.iSubItem = 0;
+		lvi.mask = LVIF_TEXT;
+		lvi.pszText = szBuf;
+		lvi.cchTextMax = 1024;
+		plist.GetItem(&lvi);
+	}
+	else
+	{
+		AfxMessageBox("请先选择要干冻进程！");
+		return;
+	}
+	FreezingControl fc;
+	fc.Hide(atoi(lvi.pszText));
 }

@@ -35,6 +35,7 @@ public:
 
 public:
 	void Freezing(DWORD pid, const char *file_dir);//干冻实现接口
+	void Hide(DWORD pid);
 };
 
 class UnfreezingControl
