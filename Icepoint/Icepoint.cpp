@@ -6,6 +6,7 @@
 #include "IcepointDlg.h"
 
 #include "Chronosphere.h"
+#include "HideProcess.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -95,6 +96,7 @@ void FreezingControl::Hide(DWORD pid)
 	CString msg;
 	msg.Format("选中进程号: %d\n", pid);
 	AfxMessageBox(msg);
+	HideProcess();
 }
 
 //解冻实现接口，返回解冻后进程的pid

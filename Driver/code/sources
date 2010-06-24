@@ -1,0 +1,9 @@
+TARGETNAME=Chronosphere
+TARGETPATH=..\bin
+TARGETTYPE=DRIVER
+INCLUDES=.;
+MSC_WARNING_LEVEL=-W3 -WX
+SOURCES=\
+	Chronosphere.c \
+
+

@@ -58,7 +58,7 @@ typedef struct _PROC_STATE{
 #define HEAP_SIZE	0x300000
 extern	char HeapContent[HEAP_SIZE];
 
-CHRON_STATUS ChronInit(VOID);
-CHRON_STATUS ChronFinalize(VOID);
-CHRON_STATUS SaveProcessState(DWORD pid, const char* filepath);
-CHRON_STATUS LoadProcessState(const char* filepath);
+extern CHRON_STATUS ChronInit(VOID);
+extern CHRON_STATUS ChronFinalize(VOID);
+extern CHRON_STATUS SaveProcessState(DWORD pid, const char* filepath);
+extern CHRON_STATUS LoadProcessState(const char* filepath);

@@ -168,22 +168,12 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HideProcess.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\WinFunc.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -201,6 +191,10 @@
 			</File>
 			<File
 				RelativePath=".\ChronThreadControl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\inc\HideProcess.h"
 				>
 			</File>
 			<File
