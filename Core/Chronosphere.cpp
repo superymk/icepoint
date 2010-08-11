@@ -10,7 +10,8 @@
 
 // Heap Related
 // Ugly design, this will be replaced by GetProcessHeaps & HeapWalk()
-char HeapContent[0x300000];
+char HeapContent[HEAP_SIZE];
+unsigned int Heapsize;
 
 static PPEB GetPebBaseAddress(HANDLE hProcess);
 static PTEB GetTebBaseAddress(HANDLE hThread);
@@ -95,7 +96,7 @@ CHRON_STATUS SaveProcessState(DWORD pid, const char* filepath)
 		return CHRON_ERR_OPEN_PROCESS;
 
 	peb = GetPebBaseAddress(hProcess);
-	Sleep(1000);//Ensure all threads are completely created
+	Sleep(1000);//Ensure all threads are completely created???
 
 	status = ListProcessThreads(pid, &numThreads,&threadIDs);
 	if(!status)
@@ -158,11 +159,44 @@ CHRON_STATUS SaveProcessState(DWORD pid, const char* filepath)
 	// Dump process heap 
 	// Ugly design, this will be replaced by GetProcessHeaps & HeapWalk()
 	//TODO : Need Fix, We don't support heap dump at the moment.
-	DWORD heapAddr;
+	/*DWORD heapAddr;
 
 	ReadProcessMemory(hProcess, &peb->ProcessHeaps, &heapAddr, 4, &read);
 	ReadProcessMemory(hProcess, (PVOID)heapAddr, &heapAddr, 4, &read);
-	ReadProcessMemory(hProcess, (PVOID)heapAddr, HeapContent, 0x100000, &read);
+	ReadProcessMemory(hProcess, (PVOID)heapAddr, HeapContent, 0x100000, &read);*/
+
+	// Dump process heap
+	HEAPLIST32 hl;
+	HANDLE hHeapSnap = CreateToolhelp32Snapshot(TH32CS_SNAPHEAPLIST, pid);
+	Heapsize = 0;
+	
+	hl.dwSize = sizeof(HEAPLIST32);
+	if ( hHeapSnap == INVALID_HANDLE_VALUE )
+		return CHRON_ERR_SNAPSHOT;
+	
+	if( Heap32ListFirst( hHeapSnap, &hl ) )
+	{
+		do
+		{
+			HEAPENTRY32 he;
+			ZeroMemory(&he, sizeof(HEAPENTRY32));
+			he.dwSize = sizeof(HEAPENTRY32);
+			
+			if( Heap32First( &he, pid, hl.th32HeapID ) )
+			{
+				do
+				{
+					ReadProcessMemory(hProcess, (LPCVOID)he.dwAddress, HeapContent + Heapsize, he.dwBlockSize, &read);
+					Heapsize += he.dwBlockSize;
+					he.dwSize = sizeof(HEAPENTRY32);
+				} while( Heap32Next(&he));
+			}
+			hl.dwSize = sizeof(HEAPLIST32);
+		} while (Heap32ListNext( hHeapSnap, &hl));
+	}
+	else 
+		return CHRON_ERR_HEAPLIST;
+	CloseHandle(hHeapSnap);
 
 	// Fill other elements in <processState>
 	memcpy(processState.ImageFilePath, exefilePath, MAX_PATH);
@@ -190,9 +224,11 @@ CHRON_STATUS SaveProcessState(DWORD pid, const char* filepath)
 	if (writeByte != sizeof(PROC_STATE))
 		return CHRON_IO_ERROR;
 
-	WriteFile(hFile, HeapContent, HEAP_SIZE, &writeByte, NULL);
-	if (writeByte != HEAP_SIZE)
+	WriteFile(hFile, (char*)(&Heapsize), 4, &writeByte, NULL);
+	WriteFile(hFile, HeapContent, Heapsize, &writeByte, NULL);
+	if (writeByte != Heapsize)
 		return CHRON_IO_ERROR;
+	CloseHandle(hFile);
 
  	return CHRON_SUCCESS;
 }
@@ -237,10 +273,10 @@ CHRON_STATUS LoadProcessState(const char* filepath)
 	DWORD readBytes = 0;
 
 	hFile = CreateFile(filepath,               // file to create
-		OPEN_ALWAYS,          // creat a new one and will overwrite the old one
+		GENERIC_READ,          // creat a new one and will overwrite the old one
 		FILE_SHARE_READ | FILE_SHARE_WRITE,       // share for reading and writting
 		NULL,                  // default security
-		CREATE_ALWAYS,         // creat a new one and will overwrite the old one
+		OPEN_EXISTING,         // creat a new one and will overwrite the old one...
 		FILE_ATTRIBUTE_NORMAL, // normal file
 		NULL);                 // no attr. template
 			
@@ -251,8 +287,9 @@ CHRON_STATUS LoadProcessState(const char* filepath)
 	if (status && readBytes != sizeof(PROC_STATE))
 		return CHRON_IO_ERROR;
 
-	status = ReadFile(hFile, HeapContent, HEAP_SIZE, &readBytes, NULL);
-	if (status && readBytes != HEAP_SIZE)
+	status = ReadFile(hFile, (char*)(&Heapsize), 4, &readBytes, NULL);
+	status = ReadFile(hFile, HeapContent, Heapsize, &readBytes, NULL);
+	if (status && readBytes != Heapsize)
 		return CHRON_IO_ERROR;
 
 	// Create new process instance
@@ -270,7 +307,7 @@ CHRON_STATUS LoadProcessState(const char* filepath)
         return CHRON_ERR_CREATE_PROCESS;
 
 	peb = GetPebBaseAddress(hProcess);
-	Sleep(1000);
+	Sleep(1100);
 	hProcess = pi.hProcess;
 	pid = pi.dwProcessId;
 
@@ -315,7 +352,7 @@ CHRON_STATUS LoadProcessState(const char* filepath)
 		CloseHandle(hThread);
 	}
 
-	// Dump process global data
+	// Fill process global data
 	DWORD gsVSize = 0;
 	PVOID gsVA = NULL;
 	gsVA = GetProcGlobalSegVA(pid, &gsVSize, NULL);
@@ -328,13 +365,47 @@ CHRON_STATUS LoadProcessState(const char* filepath)
 	// Dump process heap 
 	// Ugly design, this will be replaced by GetProcessHeaps & HeapWalk()
 	//TODO : Need Fix, We don't support heap dump at the moment.
-	DWORD heapAddr;
+	/*DWORD heapAddr;
 
 	ReadProcessMemory(hProcess, &peb->ProcessHeaps, &heapAddr, 4, &read);
 	ReadProcessMemory(hProcess, (PVOID)heapAddr, &heapAddr, 4, &read);
 	WriteProcessMemory(hProcess, (PVOID)heapAddr, HeapContent, 0x100000, &write);
 	if(!write)
-		return CHRON_ERR_WRITEMEM;
+		return CHRON_ERR_WRITEMEM;*/
+
+	// Fill process heap
+	HEAPLIST32 hl;
+	HANDLE hHeapSnap = CreateToolhelp32Snapshot(TH32CS_SNAPHEAPLIST, pid);
+	Heapsize = 0;
+	
+	hl.dwSize = sizeof(HEAPLIST32);
+	if ( hHeapSnap == INVALID_HANDLE_VALUE )
+		return CHRON_ERR_SNAPSHOT;
+	
+	if( Heap32ListFirst( hHeapSnap, &hl ) )
+	{
+		do
+		{
+			HEAPENTRY32 he;
+			ZeroMemory(&he, sizeof(HEAPENTRY32));
+			he.dwSize = sizeof(HEAPENTRY32);
+			
+			if( Heap32First( &he, pid, hl.th32HeapID ) )
+			{
+				do
+				{
+					WriteProcessMemory(hProcess, (LPVOID)he.dwAddress, HeapContent + Heapsize, he.dwBlockSize, &write);
+					Heapsize += he.dwBlockSize;
+					he.dwSize = sizeof(HEAPENTRY32);
+				} while( Heap32Next(&he));
+			}
+			hl.dwSize = sizeof(HEAPLIST32);
+		} while (Heap32ListNext( hHeapSnap, &hl));
+	}
+	else 
+		return CHRON_ERR_HEAPLIST;
+	CloseHandle(hHeapSnap);
+
 
 	status = ResumeAllThreads(threadIDs, numThreads);
 	if(!status)

@@ -168,10 +168,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\HideProcess.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\WinFunc.cpp"
 				>
 			</File>
@@ -191,10 +187,6 @@
 			</File>
 			<File
 				RelativePath=".\ChronThreadControl.h"
-				>
-			</File>
-			<File
-				RelativePath="..\inc\HideProcess.h"
 				>
 			</File>
 			<File

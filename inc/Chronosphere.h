@@ -16,6 +16,7 @@
  */
 #pragma once 
 #include <windows.h>
+#include <Tlhelp32.h>
 
 #define CHRON_SUCCESS				0x10000000
 #define CHRON_UNSUCCESSFUL			0x80000000
@@ -30,6 +31,8 @@
 #define CHRON_ERR_READMEM			0x80000009
 #define CHRON_ERR_RESUMETHREAD		0x8000000A
 #define CHRON_IO_ERROR				0x8000000B
+#define CHRON_ERR_SNAPSHOT			0x8000000C
+#define CHRON_ERR_HEAPLIST			0x8000000D
 
 #define PAGESIZE	4096
 #define MAX_THREAD	10
@@ -55,7 +58,7 @@ typedef struct _PROC_STATE{
 
 // Heap Related
 // Ugly design, this will be replaced by GetProcessHeaps & HeapWalk()
-#define HEAP_SIZE	0x300000
+#define HEAP_SIZE	0x10000000
 extern	char HeapContent[HEAP_SIZE];
 
 extern CHRON_STATUS ChronInit(VOID);
